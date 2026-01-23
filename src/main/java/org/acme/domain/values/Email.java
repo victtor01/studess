@@ -2,6 +2,8 @@ package org.acme.domain.values;
 
 import java.util.regex.Pattern;
 
+import org.acme.domain.exceptions.InvalidEmailException;
+
 public class Email {
 	private String address;
 
@@ -11,8 +13,11 @@ public class Email {
 		return address;
 	}
 
-	public Email(String email) throws Exception {
-		this.validateEmail(email);
+	public Email(String email) {
+        if (!patternMatches(email)) {
+            throw new InvalidEmailException(email);
+        }
+
 		this.address = email;
 	}
 
@@ -23,7 +28,7 @@ public class Email {
 
 	private void validateEmail(String value) throws Exception {
 		if (!patternMatches(value)) {
-			throw new Exception("Email inválido");
+			throw new InvalidEmailException("Email inválido");
 		}
 	}
 

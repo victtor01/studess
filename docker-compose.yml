@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: study-postgres
+    environment:
+      POSTGRES_DB: studydb
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    container_name: study-redis
+    ports:
+      - "6379:6379"
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: study-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+volumes:
+  pgdata:

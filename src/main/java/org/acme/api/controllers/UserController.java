@@ -1,12 +1,31 @@
 package org.acme.api.controllers;
 
-import jakarta.ws.rs.GET;
+import org.acme.api.dtos.request.CreateUserRequest;
+import org.acme.api.mappers.UserMapperApi;
+import org.acme.application.usecases.users.CreateUserCommand;
+import org.acme.application.usecases.users.CreateUserUseCase;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.MediaType;
 
 @Path("/users")
+@Consumes(MediaType.APPLICATION_JSON)
 public class UserController {
-	@GET()
-	public String index() {
-		return "TEST";
+
+	private final CreateUserUseCase createUserUseCase;
+
+	@Inject
+	public UserController(CreateUserUseCase createUserUseCase) {
+		this.createUserUseCase = createUserUseCase;
+	}
+
+	@POST()
+	public String index(CreateUserRequest request) throws Exception {
+		CreateUserCommand command = UserMapperApi.tCommandoCreateUserCommand(request);
+
+		return createUserUseCase.execute(command).getEmail().getAddress();
 	} 
 }

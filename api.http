@@ -1,0 +1,22 @@
+@HOST=http://localhost:8080
+
+
+### Authenticate User
+POST {{HOST}}/auth/request
+Content-Type: application/json
+
+{
+	"email": "josevictot.ar@gmail.com"
+}
+
+
+### Create User
+POST {{HOST}}/users
+Content-Type: application/json
+
+{
+	"firstName": "John",
+	"lastName": "Doe",
+	"email": "john.doe@example.com",
+	"password": "SecureP@ssw0rd"
+}
