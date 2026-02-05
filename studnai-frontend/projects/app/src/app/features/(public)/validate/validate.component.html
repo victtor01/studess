@@ -1,0 +1,98 @@
+<!-- validate.component.html -->
+<div class="flex h-dvh w-full bg-[#0d1117]">
+  <div class="m-auto w-full max-w-sm">
+    <!-- Card -->
+    <div class="bg-[#161b22] border border-[#30363d] rounded-lg p-8">
+      <!-- Loading State -->
+      @if (state().isLoading) {
+        <div class="flex flex-col items-center gap-6 animate-fade">
+          <div class="spinner"></div>
+          <div class="text-center space-y-1">
+            <p class="text-sm text-[#c9d1d9] font-medium">Validando</p>
+            <p class="text-xs text-[#8b949e]">Processando suas informações...</p>
+          </div>
+        </div>
+      }
+
+      <!-- Success State -->
+      @if (state().data) {
+        <div class="flex flex-col items-center gap-6 animate-fade">
+          <!-- Success Icon -->
+          <div
+            class="w-12 h-12 border-2 border-[#238636] rounded-full flex items-center justify-center"
+          >
+            <svg
+              class="w-6 h-6 text-[#238636]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
+          </div>
+
+          <div class="text-center space-y-1">
+            <p class="text-sm text-[#c9d1d9] font-medium">Validação concluída</p>
+            <p class="text-xs text-[#8b949e]">{{ state().data }}</p>
+          </div>
+
+          <button
+            (click)="navigateToDashboard()"
+            class="w-full mt-2 bg-[#238636] text-white text-sm py-2.5 px-4 rounded-md hover:bg-[#2ea043] transition-colors"
+          >
+            Continuar
+          </button>
+        </div>
+      }
+
+      <!-- Error State -->
+      @if (state().error) {
+        <div class="flex flex-col items-center gap-6 animate-fade">
+          <!-- Error Icon -->
+          <div
+            class="w-12 h-12 border-2 border-[#f85149] rounded-full flex items-center justify-center"
+          >
+            <svg
+              class="w-6 h-6 text-[#f85149]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </div>
+
+          <div class="text-center space-y-1">
+            <p class="text-sm text-[#c9d1d9] font-medium">Erro na validação</p>
+            <p class="text-xs text-[#8b949e]">{{ state().error }}</p>
+          </div>
+
+          <div class="w-full flex gap-2 mt-2">
+            <button
+              (click)="goToLogin()"
+              class="flex-1 bg-[#21262d] text-[#c9d1d9] text-sm py-2.5 px-4 rounded-md hover:bg-[#30363d] transition-colors border border-[#30363d]"
+            >
+              Voltar
+            </button>
+            <button
+              (click)="retryValidation()"
+              class="flex-1 bg-[#238636] text-white text-sm py-2.5 px-4 rounded-md hover:bg-[#2ea043] transition-colors"
+            >
+              Tentar novamente
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+/* app/assets/css/travel.font.css */
+
+/* --- VARIABLE FONT (Melhor opção se funcionar) --- */
+@font-face {
+  font-family: 'Travels Next';
+  src:
+    url('/fonts/travels/TTTravelsNextTrialVariable.woff2') format('woff2'),
+    url('/fonts/travels/TTTravelsNextTrialVariable.woff') format('woff');
+  /* A fonte variável cobre do 100 ao 900 sozinha */
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- OU ARQUIVOS ESTÁTICOS (Caso a variável falhe, use estes) --- */
+
+/* Regular (400) */
+@font-face {
+  font-family: 'Travels Next';
+  src:
+    url('/fonts/travels/TTTravelsNextTrl-Rg.woff2') format('woff2'),
+    url('/fonts/travels/TTTravelsNextTrl-Rg.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Medium (500) */
+@font-face {
+  font-family: 'Travels Next';
+  src:
+    url('/fonts/travels/TTTravelsNextTrl-Md.woff2') format('woff2'),
+    url('/fonts/travels/TTTravelsNextTrl-Md.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Bold (700) */
+@font-face {
+  font-family: 'Travels Next';
+  src:
+    url('/fonts/travels/TTTravelsNextTrl-Bd.woff2') format('woff2'),
+    url('/fonts/travels/TTTravelsNextTrl-Bd.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Extra Bold / Black (900) */
+@font-face {
+  font-family: 'Travels Next';
+  src:
+    url('/fonts/travels/TTTravelsNextTrl-Blc.woff2') format('woff2'),
+    url('/fonts/travels/TTTravelsNextTrl-Blc.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Italic (Normal) */
+@font-face {
+  font-family: 'Travels Next';
+  src: url('/fonts/travels/TTTravelsNextTrl-It.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}

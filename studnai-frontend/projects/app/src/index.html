@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>App</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <script>
+      (function () {
+        try {
+          var getCookie = function (name) {
+            var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? v[2] : null;
+          };
+
+          var theme = getCookie('theme'); // Confirme se a chave é 'theme'
+          var support = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+          if (theme === 'dark' || (!theme && support)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {
+          console.error('Erro ao ler tema', e);
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-surface-50">
+    <app-root></app-root>
+  </body>
+</html>

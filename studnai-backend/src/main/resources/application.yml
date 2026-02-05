@@ -1,0 +1,88 @@
+quarkus:
+  http:
+    cors:
+      enabled: true # Force o 'enabled' para garantir
+      origins: "http://localhost:4200,http://10.220.0.8:4200"
+      methods: "GET,POST,PUT,DELETE,OPTIONS"
+      headers: "Content-Type,Authorization"
+
+  mailer:
+    mock: false
+    host: localhost
+    port: 1025
+    from: "Study Platform <no-reply@study-platform.dev>"
+
+  redis:
+    hosts: redis://localhost:6379
+
+  datasource:
+    devservices:
+      enabled: false
+    db-kind: postgresql
+    username: app
+    password: app
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/studydb
+
+  hibernate-orm:
+    database:
+      generation: none
+    log:
+      sql: true
+
+  flyway:
+    migrate-at-start: true
+
+smallrye:
+  jwt:
+    sign:
+      key:
+        location: privateKey.pem
+
+mp:
+  jwt:
+    verify:
+      publickey:
+        location: publicKey.pem
+      issuer: study-platform
+
+# =========================
+# PERFIL DEV (LocalStack)
+# =========================
+"%dev":
+  quarkus:
+    hibernate-orm:
+      database:
+        generation: drop-and-create
+      log:
+        sql: true
+
+    http:
+      cors:
+        ~: true
+        origins: http://localhost:4200,http://localhost:9090
+        headers: accept, authorization, content-type, x-requested-with
+        methods: GET, OPTIONS, POST
+
+    mailer:
+      mock: false
+
+    s3:
+      endpoint-override: ${LOCALSTACK_ENDPOINT:http://localhost:4566}
+      aws:
+        region: ${AWS_REGION:us-east-1}
+        credentials:
+          type: static
+          static-provider:
+            access-key-id: ${AWS_ACCESS_KEY_ID:test}
+            secret-access-key: ${AWS_SECRET_ACCESS_KEY:test}
+
+    sqs:
+      endpoint-override: ${LOCALSTACK_ENDPOINT:http://localhost:4566}
+      aws:
+        region: ${AWS_REGION:us-east-1}
+        credentials:
+          type: static
+          static-provider:
+            access-key-id: ${AWS_ACCESS_KEY_ID:test}
+            secret-access-key: ${AWS_SECRET_ACCESS_KEY:test}

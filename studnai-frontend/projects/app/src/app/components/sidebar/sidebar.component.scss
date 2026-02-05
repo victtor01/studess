@@ -1,0 +1,123 @@
+/* sidebar.component.scss */
+
+/* Scrollbar customizada para dark/light mode */
+aside {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(209 213 219) transparent;
+}
+
+aside::-webkit-scrollbar {
+  width: 6px;
+}
+
+aside::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+  background-color: rgb(209 213 219);
+  border-radius: 3px;
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(156 163 175);
+}
+
+/* Dark mode scrollbar */
+.dark aside {
+  scrollbar-color: rgb(55 65 81) transparent;
+}
+
+.dark aside::-webkit-scrollbar-thumb {
+  background-color: rgb(55 65 81);
+}
+
+.dark aside::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(75 85 99);
+}
+
+/* Overflow container scrollbar */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(229 231 235) transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 5px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: rgb(229 231 235);
+  border-radius: 3px;
+}
+
+.dark .overflow-y-auto {
+  scrollbar-color: rgb(55 65 81) transparent;
+}
+
+.dark .overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: rgb(55 65 81);
+}
+
+/* Animação suave para o details/summary */
+details summary::marker {
+  content: '';
+}
+
+details[open] > summary {
+  margin-bottom: 4px;
+}
+
+/* Hover effect nos módulos */
+details summary:hover svg {
+  color: rgb(107 114 128);
+}
+
+.dark details summary:hover svg {
+  color: rgb(156 163 175);
+}
+
+/* Animação do progresso */
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+.ai-credits-bar {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Efeito de foco melhorado */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgb(249 115 22);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+.dark button:focus-visible,
+.dark a:focus-visible {
+  outline-color: rgb(251 146 60);
+}
+
+/* Transições suaves */
+* {
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
