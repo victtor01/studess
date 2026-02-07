@@ -1,13 +1,13 @@
 package org.acme.infrastructure.adapters.out.database.repositories;
 
-import java.util.Optional;
-
 import org.acme.application.ports.out.UserRepositoryPort;
 import org.acme.domain.models.users.User;
 import org.acme.infrastructure.adapters.out.database.entities.user.UserEntity;
 import org.acme.infrastructure.mappers.UserInfraMapper;
 
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.hibernate.reactive.panache.Panache;
+import io.quarkus.hibernate.reactive.panache.PanacheRepositoryBase;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -18,17 +18,18 @@ public class UserRepositoryAdapter implements UserRepositoryPort, PanacheReposit
     UserInfraMapper userMapper;
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Uni<User> findByEmail(String email) {
         return find("email", email)
-                .firstResultOptional()
-                .map(userMapper::toDomain);
+                .firstResult() // Retorna Uni<UserEntity> (pode ser nulo se não achar)
+                .map(userMapper::toDomain); // O Mapper deve saber lidar com null
     }
 
     @Override
-    public User save(User user) {
+    public Uni<User> save(User user) {
         UserEntity entity = userMapper.toEntity(user);
-        // persist é do Panache. Se o ID já existir, ele faz o merge se necessário
-        persist(entity);
-        return userMapper.toDomain(entity);
+        
+        return Panache.withTransaction(() -> 
+            persist(entity).replaceWith(entity))
+            .map(userMapper::toDomain);
     }
 }

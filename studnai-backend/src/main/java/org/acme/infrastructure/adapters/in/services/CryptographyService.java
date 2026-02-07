@@ -1,4 +1,4 @@
-package org.acme.infrastructure.adapters.in;
+package org.acme.infrastructure.adapters.in.services;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

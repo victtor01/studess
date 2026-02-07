@@ -1,4 +1,4 @@
-package org.acme.infrastructure.adapters.in;
+package org.acme.infrastructure.adapters.in.services;
 
 import org.acme.application.ports.in.PasswordService;
 

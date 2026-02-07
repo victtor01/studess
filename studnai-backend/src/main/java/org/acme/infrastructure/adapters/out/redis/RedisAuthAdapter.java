@@ -2,31 +2,33 @@ package org.acme.infrastructure.adapters.out.redis;
 
 import org.acme.application.ports.out.AuthCachePort;
 
-import io.quarkus.redis.datasource.RedisDataSource;
-import io.quarkus.redis.datasource.value.ValueCommands;
+import io.quarkus.redis.datasource.ReactiveRedisDataSource;
+import io.quarkus.redis.datasource.value.ReactiveValueCommands;
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class RedisAuthAdapter implements AuthCachePort {
 
-    private final ValueCommands<String, String> countCommands;
+    private final ReactiveValueCommands<String, String> countCommands;
 
-    public RedisAuthAdapter(RedisDataSource ds) {
+    public RedisAuthAdapter(ReactiveRedisDataSource ds) {
         this.countCommands = ds.value(String.class);
     }
 
     @Override
-    public void saveToken(String token, String email, long ttl) {
-        countCommands.setex(token, ttl, email);
+    public Uni<Void> saveToken(String token, String email, long ttl) {
+        return countCommands.setex(token, ttl, email);
     }
 
     @Override
-    public String getEmailByToken(String token) {
+    public Uni<String> getEmailByToken(String token) {
         return countCommands.get(token);
     }
 
     @Override
-    public void invalidateToken(String token) {
-        countCommands.getdel(token);
+    public Uni<Void> invalidateToken(String token) {
+        return countCommands.getdel(token)
+        .replaceWithVoid();
     }
 }

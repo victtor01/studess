@@ -70,6 +70,17 @@
   --color-error: #ef4444;
   --color-info: #f97316;
 
+  --color-on-surface-50: rgba(0, 0, 0, 0.02);
+  --color-on-surface-100: rgba(0, 0, 0, 0.05);
+  --color-on-surface-200: rgba(0, 0, 0, 0.1);
+  --color-on-surface-300: rgba(0, 0, 0, 0.2);
+  --color-on-surface-400: rgba(0, 0, 0, 0.4);
+  --color-on-surface-500: rgba(0, 0, 0, 0.5);
+  --color-on-surface-600: rgba(0, 0, 0, 0.6);
+  --color-on-surface-700: rgba(0, 0, 0, 0.7);
+  --color-on-surface-800: rgba(0, 0, 0, 0.8);
+  --color-on-surface-900: rgba(0, 0, 0, 0.9);
+
   /* ============================================
      TIPOGRAFIA
      ============================================ */
@@ -107,20 +118,6 @@
 }
 
 :root {
-  /* ============================================
-     OPACIDADES SEMÂNTICAS - Light Mode
-     ============================================ */
-  --on-surface-50: rgba(0, 0, 0, 0.02);
-  --on-surface-100: rgba(0, 0, 0, 0.05);
-  --on-surface-200: rgba(0, 0, 0, 0.1);
-  --on-surface-300: rgba(0, 0, 0, 0.2);
-  --on-surface-400: rgba(0, 0, 0, 0.4);
-  --on-surface-500: rgba(0, 0, 0, 0.5);
-  --on-surface-600: rgba(0, 0, 0, 0.6);
-  --on-surface-700: rgba(0, 0, 0, 0.7);
-  --on-surface-800: rgba(0, 0, 0, 0.8);
-  --on-surface-900: rgba(0, 0, 0, 0.9);
-
   /* Sombras personalizadas */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -167,16 +164,16 @@
   /* ============================================
      OPACIDADES SEMÂNTICAS - Dark Mode
      ============================================ */
-  --on-surface-50: rgba(255, 255, 255, 0.03);
-  --on-surface-100: rgba(255, 255, 255, 0.05);
-  --on-surface-200: rgba(255, 255, 255, 0.1);
-  --on-surface-300: rgba(255, 255, 255, 0.2);
-  --on-surface-400: rgba(255, 255, 255, 0.4);
-  --on-surface-500: rgba(255, 255, 255, 0.6);
-  --on-surface-600: rgba(255, 255, 255, 0.7);
-  --on-surface-700: rgba(255, 255, 255, 0.8);
-  --on-surface-800: rgba(255, 255, 255, 0.9);
-  --on-surface-900: rgba(255, 255, 255, 0.95);
+  --color-on-surface-50: rgba(255, 255, 255, 0.03);
+  --color-on-surface-100: rgba(255, 255, 255, 0.05);
+  --color-on-surface-200: rgba(255, 255, 255, 0.1);
+  --color-on-surface-300: rgba(255, 255, 255, 0.2);
+  --color-on-surface-400: rgba(255, 255, 255, 0.4);
+  --color-on-surface-500: rgba(255, 255, 255, 0.6);
+  --color-on-surface-600: rgba(255, 255, 255, 0.7);
+  --color-on-surface-700: rgba(255, 255, 255, 0.8);
+  --color-on-surface-800: rgba(255, 255, 255, 0.9);
+  --color-on-surface-900: rgba(255, 255, 255, 0.95);
 
   /* Sombras dark mode */
   --shadow-sm: 0 1px 0 rgba(1, 4, 9, 0.1);

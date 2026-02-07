@@ -1,8 +1,19 @@
 package org.acme.infrastructure.adapters.out.database.entities.question;
 
-import jakarta.persistence.*;
 import org.acme.domain.enums.QuestionType;
 import org.acme.infrastructure.adapters.out.database.entities.proof.ProofEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "questions")

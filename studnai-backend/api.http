@@ -8,7 +8,9 @@ Content-Type: application/json
 {
 	"email": "josevictot.ar@gmail.com"
 }
+###
 
+GET {{HOST}}/auth/i HTTP/1.1
 
 ### Create User
 POST {{HOST}}/users

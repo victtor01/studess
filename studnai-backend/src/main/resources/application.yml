@@ -24,6 +24,9 @@ quarkus:
     jdbc:
       url: jdbc:postgresql://localhost:5432/studydb
 
+    reactive:
+      url: postgresql://localhost:5432/studydb
+
   hibernate-orm:
     database:
       generation: none
@@ -46,9 +49,6 @@ mp:
         location: publicKey.pem
       issuer: study-platform
 
-# =========================
-# PERFIL DEV (LocalStack)
-# =========================
 "%dev":
   quarkus:
     hibernate-orm:

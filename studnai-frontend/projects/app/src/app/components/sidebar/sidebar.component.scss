@@ -121,3 +121,81 @@ a:focus-visible {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+/* ========================================
+   RESIZE FUNCTIONALITY
+   ======================================== */
+
+/* Prevenir transição de largura durante resize para performance */
+aside {
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+/* Cursor durante resize */
+body.resizing,
+body.resizing * {
+  cursor: ew-resize !important;
+  user-select: none !important;
+}
+
+/* Estilos do resize handle */
+.resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  cursor: ew-resize;
+  transition: background-color 0.2s ease;
+  z-index: 20;
+}
+
+.resize-handle:hover {
+  background-color: rgba(249, 115, 22, 0.5);
+}
+
+.resize-handle:active {
+  background-color: rgba(249, 115, 22, 1);
+}
+
+/* Indicador visual no hover */
+.resize-handle .resize-indicator {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 48px;
+  background-color: rgb(209, 213, 219);
+  border-radius: 4px 0 0 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.dark .resize-handle .resize-indicator {
+  background-color: rgb(107, 114, 128);
+}
+
+.resize-handle:hover .resize-indicator {
+  opacity: 1;
+}
+
+/* Área de hover expandida para facilitar o grab */
+.resize-handle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -4px;
+  width: 8px;
+  height: 100%;
+  cursor: ew-resize;
+}
+
+/* Animação suave ao soltar */
+aside:not(.resizing) {
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}

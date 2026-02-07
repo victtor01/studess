@@ -10,9 +10,9 @@ import org.acme.domain.models.auth.Session;
 import org.acme.domain.models.users.User;
 import org.acme.domain.values.Email;
 
+import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class ValidateAuthUseCase {
@@ -29,37 +29,30 @@ public class ValidateAuthUseCase {
         this.sessionServicePort = sessionServicePort;
     }
 
-    @Transactional
-    public String execute(String token) {
+    public Uni<String> execute(String token) {
         String tokenHash = cryptographyFactoryPort.hash(token);
 
-        String email = cachePort.getEmailByToken(tokenHash);
-          
-        if (email == null) {
-            throw new RuntimeException("Token inválido ou expirado");
-        }
-        
-        cachePort.invalidateToken(tokenHash);
+        return cachePort.getEmailByToken(tokenHash)
+            .onItem().ifNull().failWith(new RuntimeException("Token inválido ou expirado!"))
+            .call(email -> cachePort.invalidateToken(tokenHash))
+            .chain(email -> userRepositoryPort.findByEmail(email)
+                .onItem().ifNull().switchTo(() -> {
+                    Email newEmail = new Email(email);
+                    User newUser = User.create(null, null, newEmail);
+                    
+                    return userRepositoryPort.save(newUser);
+                }))
+            .chain(user -> {
+                UUID userId = user.getId();
+                String sessionId = UUID.randomUUID().toString();
 
-        User currentUser = userRepositoryPort.findByEmail(email)
-            .orElseGet(() -> {
-                Email newEmail = new Email(email);
+                long ttlInSeconds = 60 * 60 * 24 * 7;
+                long expiresAt = System.currentTimeMillis() + (ttlInSeconds * 1000);
 
-                User newUser = User.create(null, null, newEmail);
-                
-                return userRepositoryPort.save(newUser);
+                Session session = new Session(sessionId, userId, expiresAt);
+
+                return sessionServicePort.save(session, ttlInSeconds)
+                        .replaceWith(sessionId);
             });
-
-        UUID userId = currentUser.getId();
-        String sessionId = UUID.randomUUID().toString();
-
-        long ttlInSeconds = 60 * 60 * 24 * 7;
-        long expiresAt = System.currentTimeMillis() + (ttlInSeconds * 1000);
-
-        Session session = new Session(sessionId, userId, expiresAt);
-
-        sessionServicePort.save(session, ttlInSeconds);
-
-        return sessionId;
     }
 }

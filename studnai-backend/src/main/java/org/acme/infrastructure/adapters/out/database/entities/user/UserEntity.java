@@ -3,7 +3,7 @@ package org.acme.infrastructure.adapters.out.database.entities.user;
 import java.time.Instant;
 import java.util.UUID;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
