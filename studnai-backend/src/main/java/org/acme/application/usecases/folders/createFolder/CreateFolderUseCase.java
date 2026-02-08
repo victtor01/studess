@@ -6,6 +6,7 @@ import org.acme.application.ports.out.FileSystemRepositoryPort;
 import org.acme.domain.models.files.Folder;
 import org.acme.domain.utils.IdGenerator;
 
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -19,6 +20,7 @@ public class CreateFolderUseCase {
         this.idGenerator = idGenerator;
     }
 
+    @WithTransaction
     public Uni<Folder> execute(CreateFolderCommand command) {
         if (command.name() == null || command.name().isBlank()) {
             return Uni.createFrom().failure(new IllegalArgumentException("O nome é obrigatório.")); 

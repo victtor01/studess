@@ -1,0 +1,160 @@
+<header
+  class="w-full border-b border-surface-200 bg-white dark:bg-surface-100/60 transition-colors duration-200"
+>
+  <div class="flex items-center justify-between h-14 px-6">
+    <!-- Breadcrumb Navigation -->
+    <nav class="flex items-center gap-2 flex-1 min-w-0">
+      @if (navigationService.breadcrumbs().length === 0) {
+        <div class="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+          <ng-icon name="hugeFolder01" class="w-4 h-4"></ng-icon>
+          <span class="text-sm font-medium">Selecione um módulo</span>
+        </div>
+      } @else {
+        <div class="flex items-center gap-2 flex-1 min-w-0">
+          @for (
+            crumb of navigationService.formattedBreadcrumbs();
+            track crumb.id;
+            let isLast = $last
+          ) {
+            <!-- Item do breadcrumb -->
+            <div class="flex items-center gap-2 min-w-0">
+              @if (crumb.id === 'ellipsis') {
+                <!-- Reticências -->
+                <span class="text-gray-400 dark:text-gray-500 text-sm px-1">...</span>
+              } @else {
+                <!-- Item clicável -->
+                <button
+                  class="flex items-center gap-2 px-2 py-1 rounded-md transition-colors min-w-0"
+                  [class.hover:bg-surface-200/60]="!isLast"
+                  [class.cursor-pointer]="!isLast"
+                  [class.text-gray-600]="!isLast"
+                  [class.dark:text-gray-400]="!isLast"
+                  [class.text-gray-900]="isLast"
+                  [class.dark:text-gray-100]="isLast"
+                  [class.font-semibold]="isLast"
+                  [disabled]="isLast"
+                  (click)="onBreadcrumbClick(crumb)"
+                  [title]="crumb.name"
+                >
+                  <!-- Ícone do item -->
+                  <ng-icon
+                    [name]="getItemIcon(crumb)"
+                    class="w-4 h-4 shrink-0"
+                    [ngClass]="getItemColor(crumb)"
+                    color="currentColor"
+                  ></ng-icon>
+
+                  <!-- Nome truncado -->
+                  <span class="text-sm truncate max-w-50">
+                    {{ crumb.name }}
+                  </span>
+                </button>
+              }
+
+              <!-- Separador -->
+              @if (!isLast) {
+                <svg
+                  class="w-4 h-4 text-gray-400 dark:text-gray-600 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              }
+            </div>
+          }
+        </div>
+      }
+    </nav>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2 ml-4">
+      <!-- Botão de adicionar -->
+      @if (navigationService.currentItem() && navigationService.currentItem()?.type === 'folder') {
+        <button
+          class="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-surface-200/60 transition-colors"
+          (click)="onAddClick()"
+          title="Adicionar arquivo"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          <span class="hidden sm:inline">Adicionar</span>
+        </button>
+      }
+
+      <!-- Mais opções -->
+      @if (navigationService.currentItem()) {
+        <button
+          class="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-surface-200/60 transition-colors"
+          [matMenuTriggerFor]="headerMenu"
+          title="Mais opções"
+        >
+          <ng-icon name="solarMenuDotsBoldDuotone" size="20" color="currentColor"></ng-icon>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Informações adicionais (opcional) -->
+  @if (navigationService.currentItem()) {
+    <div class="px-6 pb-3 pt-1">
+      <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+        <!-- Tipo do item -->
+        <span class="flex items-center gap-1">
+          <span class="font-medium">Tipo:</span>
+          <span class="capitalize">{{
+            getItemTypeLabel(navigationService.currentItem()!.type)
+          }}</span>
+        </span>
+
+        <!-- Contador de itens (se for pasta) -->
+        @if (
+          navigationService.currentItem()?.type === 'folder' &&
+          navigationService.currentItem()?.children
+        ) {
+          <span class="flex items-center gap-1">
+            <span class="font-medium">Itens:</span>
+            <span>{{ navigationService.currentItem()!.children!.length }}</span>
+          </span>
+        }
+      </div>
+    </div>
+  }
+</header>
+
+<!-- Menu de contexto do header -->
+<mat-menu #headerMenu="matMenu">
+  @if (navigationService.currentItem()) {
+    @if (navigationService.currentItem()?.type === 'folder') {
+      <button mat-menu-item (click)="onAddClick()">
+        <ng-icon name="hugeFolderAdd" class="w-4 h-4 mr-2"></ng-icon>
+        <span>Nova Pasta</span>
+      </button>
+      <button mat-menu-item (click)="onAddFileClick()">
+        <ng-icon name="hugeFileAdd" class="w-4 h-4 mr-2"></ng-icon>
+        <span>Novo Arquivo</span>
+      </button>
+      <mat-divider></mat-divider>
+    }
+    <button mat-menu-item (click)="onRenameClick()">
+      <ng-icon name="hugeEdit02" class="w-4 h-4 mr-2"></ng-icon>
+      <span>Renomear</span>
+    </button>
+    <button mat-menu-item (click)="onDeleteClick()" class="text-red-600 dark:text-red-400">
+      <ng-icon name="hugeDelete02" class="w-4 h-4 mr-2"></ng-icon>
+      <span>Mover para Lixeira</span>
+    </button>
+  }
+</mat-menu>

@@ -51,7 +51,7 @@ import { Component, input } from '@angular/core';
     }
   `,
 })
-export class Loader {
+export class LoaderComponent {
   // Signal Input (Angular 19)
   color = input<string>('currentColor');
 }

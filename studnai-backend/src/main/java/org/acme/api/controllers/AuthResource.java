@@ -1,6 +1,5 @@
 package org.acme.api.controllers;
 
-import java.time.Duration;
 import java.util.Map;
 
 import org.acme.api.dtos.request.AuthRequest;
@@ -9,7 +8,6 @@ import org.acme.application.usecases.auth.authenticate.ValidateAuthUseCase;
 import org.acme.application.usecases.auth.request.RequestLoginUseCase;
 import org.acme.infrastructure.adapters.in.web.filters.Secured;
 
-import io.smallrye.jwt.build.Jwt;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -35,31 +33,31 @@ public class AuthResource {
 
     @POST
     @Path("/request")
-    public Response request(@Valid AuthRequest request) {
-        requestLoginUseCase.execute(request.email());
-        
-        return Response.ok(Map.of("message", "Email enviado com sucesso!")).build();
+    public Uni<Response> request(@Valid AuthRequest request) {
+        return requestLoginUseCase.execute(request.email())
+            .replaceWith(() -> Response.ok(Map.of("message", "Email enviado!")).build())
+            .onFailure().transform(err -> new WebApplicationException(err.getMessage(), 400));
     }
 
     @GET
     @Path("/callback")
     public Uni<Response> callback(@QueryParam("token") String token) {
         return validateAuthUseCase.execute(token)
-        .map((email) -> {
-            String sessionId = Jwt.issuer("study-platform")
-                .subject(email)
-                .groups("USER")
-                .expiresIn(Duration.ofHours(24))
-                .sign();
-                
+        .map((sessionId) -> {
             NewCookie sessionCookie = CookieUtil.createSessionCookie(sessionId);
 
-            return Response.ok(Map.of("message", "Login realizado com sucesso", "sessionId", sessionId))
+            return Response.ok(Map.of(
+                    "message", "Login realizado com sucesso", 
+                    "sessionId", sessionId // Retorna o ID puro
+                ))
                 .cookie(sessionCookie)
                 .build();
         })
-        .onFailure()
-            .transform(err -> new WebApplicationException(err.getMessage(), 400)); 
+      .onFailure(RuntimeException.class).recoverWithItem(err -> {
+        return Response.status(Response.Status.BAD_REQUEST)
+            .entity(Map.of("error", err.getMessage()))
+            .build();
+       });
     }
 
     @GET

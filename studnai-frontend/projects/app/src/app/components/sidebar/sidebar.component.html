@@ -1,10 +1,10 @@
 <aside
-  class="flex flex-col h-full bg-white dark:bg-surface-100/60 border-r border-surface-200 transition-colors duration-200 relative"
+  class="flex flex-col group h-full bg-white dark:bg-surface-100/60 border-r border-surface-200 transition-colors duration-200 relative"
   [style.width.px]="sidebarWidth()"
 >
   <!-- Logo -->
   <div class="border-b px-2 border-surface-200 text-gray-800 dark:text-white">
-    <div class="w-25 h-18 text-primary-50 -translate-2">
+    <div class="w-20 mx-4 h-12 dark:text-primary-50 text-gray-900 -translate-2">
       <app-logo></app-logo>
     </div>
   </div>
@@ -24,7 +24,7 @@
       </svg>
       <span class="text-sm font-medium">Busca rápida</span>
       <kbd
-        class="ml-auto text-[10px] font-mono bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded border border-gray-300 dark:border-gray-600"
+        class="ml-auto text-[10px] font-mono bg-surface-200 text-gray-600 dark:text-gray-400 px-2 rounded border border-surface-300"
       >
         ⌘K
       </kbd>
@@ -97,7 +97,7 @@
 
     <!-- User Profile -->
     <div
-      class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-surface-800 transition-colors cursor-pointer group"
+      class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-surface-200/50 transition-colors cursor-pointer group"
     >
       <div
         class="w-8 h-8 rounded-full bg-linear-to-tr from-orange-400 to-pink-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md"
@@ -106,17 +106,12 @@
       </div>
 
       <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">Victor Victor</p>
-        <p class="text-[10px] text-gray-500 dark:text-gray-400 truncate flex items-center gap-1">
-          <span class="w-1.5 h-1.5 rounded-full bg-orange-500 inline-block"></span>
-          Plano Pro
-        </p>
+        <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">José Victor</p>
       </div>
 
-      <!-- Theme Toggle -->
       <button
         (click)="themeService.toggleTheme()"
-        class="p-1.5 hover:bg-gray-200 dark:hover:bg-surface-700 rounded-md transition-colors"
+        class="p-1.5 hover:bg-surface-100 rounded-md transition-colors"
         title="Alternar tema"
       >
         <svg
@@ -149,13 +144,11 @@
     </div>
   </footer>
 
-  <!-- Resize Handle -->
   <div
     class="absolute top-0 right-0 w-1 h-full cursor-ew-resize hover:bg-primary-500/50 active:bg-primary-500 transition-colors group"
     (mousedown)="startResize($event)"
     title="Arraste para redimensionar"
   >
-    <!-- Visual indicator on hover -->
     <div
       class="absolute top-1/2 right-0 -translate-y-1/2 w-1 h-12 bg-gray-300 dark:bg-gray-600 rounded-l-full opacity-0 group-hover:opacity-100 transition-opacity"
     ></div>
@@ -164,13 +157,13 @@
 
 <ng-template #treeTemplate let-items="items" let-level="level">
   @for (item of items; track item.id) {
-    <div class="relative">
+    <div class="relative font-sans">
       <div
-        class="group/item flex items-center gap-2 px-3 py-1.5 text-on-surface-700 rounded-md cursor-pointer transition-colors"
+        class="group/item flex items-center gap-2 p-1 py-1 text-on-surface-700 rounded-md cursor-pointer transition-colors"
         [class.bg-primary-50]="selectedItem() === item.id"
         [class.dark:bg-primary-900/20]="selectedItem() === item.id"
         [class.hover:bg-surface-200/60]="selectedItem() !== item.id"
-        [style.padding-left.px]="12 + level * 10"
+        [style.padding-left.px]="14"
         (click)="item.type === 'folder' ? toggleFolder(item) : selectItem(item, $event)"
       >
         @if (item.type === 'folder') {
@@ -181,10 +174,10 @@
             color="currentColor"
           ></ng-icon>
         } @else {
-          <span class="w-3"></span>
+          <span class="w-4"></span>
         }
 
-        <div class="flex text-red-500" [ngClass]="getItemColor(item)">
+        <div class="flex" [ngClass]="getItemColor(item)">
           <ng-icon
             [name]="getItemIcon(item)"
             class="w-4 h-4 shrink-0"
@@ -204,19 +197,19 @@
 
         @if (item.type === 'folder' && item.children && item.children.length > 0) {
           <span
-            class="text-[10px] text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded"
+            class="text-[10px] text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 rounded"
           >
             {{ item.children.length }}
           </span>
         }
 
         <button
-          class="opacity-0 group-hover/item:opacity-100 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-opacity"
+          class="opacity-0 group-hover/item:opacity-100 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-surface-300 rounded transition-opacity"
           (click)="openContextMenu($event, item)"
           title="Mais opções"
         >
           <ng-icon
-            [name]="'hugeMoreVertical'"
+            [name]="'solarMenuDotsBoldDuotone'"
             size="20"
             class="text-gray-600 dark:text-gray-400"
             color="currentColor"
@@ -227,8 +220,8 @@
 
       @if (item.type === 'folder' && item.isOpen && item.children && item.children.length > 0) {
         <div
-          class="border-l border-surface-200/50 dark:border-gray-700/50"
-          [style.margin-left.px]="12 + level * 16"
+          class="border-l border-transparent group-hover:border-surface-200/50"
+          [style.margin-left.px]="20"
         >
           <ng-container
             *ngTemplateOutlet="treeTemplate; context: { items: item.children, level: level + 1 }"

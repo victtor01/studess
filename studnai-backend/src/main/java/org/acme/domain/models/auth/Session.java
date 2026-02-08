@@ -3,9 +3,11 @@ package org.acme.domain.models.auth;
 import java.util.UUID;
 
 public class Session {
-    private final String id;
-    private final UUID userId;
-    private final long expiresAt;
+    public String id;
+    public UUID userId;
+    public long expiresAt;
+
+    public Session() {}
 
     public Session(String id, UUID userId, long expiresAt) {
         this.id = id;

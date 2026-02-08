@@ -1,18 +1,40 @@
 import { ModuleIconType } from './sidebar.types';
 
 export const MODULE_ICONS: Record<ModuleIconType, string> = {
-  MATHEMATICS: 'hugeCalculator', // ou 'saxCalculator'
-  PHYSICS: 'hugeAtom02', // ou 'saxAtom'
-  PROGRAMMING: 'hugeCode', // ou 'saxCode'
-  SOFTWARE_ENGINEERING: 'hugeCpuCharge', // ou 'saxCpuCharge'
-  CHEMISTRY: 'hugeTestTube', // ou 'saxTestTube'
-  BIOLOGY: 'hugeDna', // ou 'saxDna'
-  HISTORY: 'hugeBook02', // ou 'saxBook'
-  LITERATURE: 'hugeBookOpen01', // ou 'saxBookOpen'
-  ART: 'hugePaintBoard', // ou 'saxPaintBoard'
-  MUSIC: 'hugeMusicNote01', // ou 'saxMusicNote'
-  BUSINESS: 'hugeBriefcase01', // ou 'saxBriefcase'
-  DEFAULT: 'hugeFolder01', // ou 'saxFolder'
+  MATHEMATICS: 'solarCalculatorBold',
+  PHYSICS: 'solarAtomBold',
+  PROGRAMMING: 'solarCodeBold',
+  SOFTWARE_ENGINEERING: 'saxCpuBold', // Atualizado (Iconsax)
+  CHEMISTRY: 'solarTestTubeBold',
+  BIOLOGY: 'solarLeafBold', // Atualizado (Solar Leaf)
+  HISTORY: 'solarBook2Bold',
+  LITERATURE: 'solarBookBookmarkBold',
+  ART: 'solarPaletteBold',
+  MUSIC: 'solarMusicLibrary2Bold',
+  BUSINESS: 'solarCaseBold',
+  DEFAULT: 'solarFolderBold',
+};
+
+export const FILE_TYPE_ICONS: Record<string, string> = {
+  folder: 'solarFolderBold',
+  file: 'solarFileTextBold',
+  pdf: 'solarDocumentTextBold', // Ou solarFileTextBold
+  doc: 'solarFileTextBold',
+  image: 'solarGalleryBold',
+  video: 'solarVideocameraRecordBold',
+  audio: 'solarMusicNotesBold',
+};
+
+export const ACTION_ICONS = {
+  // Usando Iconsax aqui para algumas ações específicas que ficam boas em Bold
+  createFolder: 'saxFolderAddBold',
+  createFile: 'saxDocumentText1Bold', // Representa adicionar arquivo bem
+  rename: 'solarPenBold',
+  delete: 'solarTrashBinMinimalisticBold',
+  move: 'solarMoveToFolderBold', // Ou saxFolderConnectionBold
+  copy: 'solarCopyBold',
+  share: 'solarShareBold',
+  info: 'solarInfoCircleBold',
 };
 
 export const MODULE_COLORS: Record<ModuleIconType, string> = {
@@ -28,25 +50,4 @@ export const MODULE_COLORS: Record<ModuleIconType, string> = {
   MUSIC: 'text-violet-500 dark:text-violet-400',
   BUSINESS: 'text-orange-500 dark:text-orange-400',
   DEFAULT: 'text-gray-500 dark:text-gray-400',
-};
-
-export const FILE_TYPE_ICONS: Record<string, string> = {
-  folder: 'hugeFolder01',
-  file: 'hugeFile02',
-  pdf: 'hugeDocumentAttachment',
-  doc: 'hugeFileDoc',
-  image: 'hugeImage01',
-  video: 'hugeVideo01',
-  audio: 'hugeMusicNote02',
-};
-
-export const ACTION_ICONS = {
-  createFolder: 'hugeFolderAdd',
-  createFile: 'hugeFileAdd',
-  rename: 'hugeEdit02',
-  delete: 'hugeDelete02',
-  move: 'hugeFolderTransfer',
-  copy: 'hugeCopy01',
-  share: 'hugeShare08',
-  info: 'hugeInformationCircle',
 };

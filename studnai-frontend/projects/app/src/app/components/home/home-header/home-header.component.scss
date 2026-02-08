@@ -1,0 +1,92 @@
+// header.component.scss
+
+header {
+  position: relative;
+  z-index: 10;
+}
+
+// Animações suaves
+button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Estilo do breadcrumb
+nav {
+  // Evitar quebra de linha
+  white-space: nowrap;
+
+  button[disabled] {
+    cursor: default;
+    opacity: 1;
+  }
+}
+
+// Truncar texto longo mantendo legibilidade
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Efeito de hover nos breadcrumbs
+nav button:not([disabled]):hover {
+  transform: translateY(-1px);
+}
+
+// Animação de entrada
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+header {
+  animation: slideDown 0.3s ease-out;
+}
+
+// Separadores com transição suave
+svg {
+  transition: color 0.2s ease;
+}
+
+// Estilo dos botões de ação
+.flex.items-center.gap-2 button {
+  &:hover {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Dark mode adjustments
+:host-context(.dark) {
+  svg {
+    opacity: 0.9;
+  }
+}
+
+// Responsividade
+@media (max-width: 640px) {
+  // Ocultar labels em mobile
+  .hidden.sm\:inline {
+    display: none;
+  }
+
+  // Reduzir padding em telas pequenas
+  .px-6 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  // Breadcrumb mais compacto
+  nav button {
+    max-width: 120px;
+  }
+}

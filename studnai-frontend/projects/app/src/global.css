@@ -239,3 +239,16 @@ body {
 * {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 12px !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+// Opcional: Efeito de blur no fundo quando o modal abre
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.2);
+}

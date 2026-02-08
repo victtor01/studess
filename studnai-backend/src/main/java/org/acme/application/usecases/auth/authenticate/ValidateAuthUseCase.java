@@ -10,6 +10,7 @@ import org.acme.domain.models.auth.Session;
 import org.acme.domain.models.users.User;
 import org.acme.domain.values.Email;
 
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -29,6 +30,7 @@ public class ValidateAuthUseCase {
         this.sessionServicePort = sessionServicePort;
     }
 
+    @WithTransaction
     public Uni<String> execute(String token) {
         String tokenHash = cryptographyFactoryPort.hash(token);
 

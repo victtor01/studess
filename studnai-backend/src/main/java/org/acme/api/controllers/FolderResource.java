@@ -7,6 +7,7 @@ import org.acme.api.mappers.FolderMapperApi;
 import org.acme.application.usecases.folders.createFolder.CreateFolderCommand;
 import org.acme.application.usecases.folders.createFolder.CreateFolderUseCase;
 import org.acme.domain.models.auth.Session;
+import org.acme.infrastructure.adapters.in.web.filters.Secured;
 
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
@@ -17,6 +18,7 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 
 @Path("/folders")
+@Secured
 public class FolderResource {
     private final CreateFolderUseCase createFolderUseCase;
     private final Session session;

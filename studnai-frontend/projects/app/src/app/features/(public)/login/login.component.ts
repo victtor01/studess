@@ -1,4 +1,4 @@
-import { Loader } from '@/components/loader/loader.component';
+import { LoaderComponent } from '@/components/loader/loader.component';
 import { LogoComponent } from '@/components/logo/logo.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
@@ -11,7 +11,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   templateUrl: './login.component.html',
-  imports: [LogoComponent, ReactiveFormsModule, Loader, NgIcon],
+  imports: [LogoComponent, ReactiveFormsModule, LoaderComponent, NgIcon],
   viewProviders: [provideIcons({ saxArrowRight3Outline })],
   styles: `
     .banner-clip {

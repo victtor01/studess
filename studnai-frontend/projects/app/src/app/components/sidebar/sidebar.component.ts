@@ -1,66 +1,29 @@
-// sidebar.component.ts
+// sidebar.component.ts (ATUALIZADO)
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { appIcons } from '@core/configs/app.icons';
+import { NavigationService } from '@core/services/navigation.service';
 import { ThemeService } from '@core/services/theme.service';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import {
-  hugeAtom02,
-  hugeBook02,
-  hugeBookOpen01,
-  hugeBriefcase01,
-  hugeCalculator,
-  hugeCode,
-  hugeCpuCharge,
-  hugeDelete02,
-  hugeDna,
-  hugeDocumentAttachment,
-  hugeEdit02,
-  hugeFile02,
-  hugeFileAdd,
-  hugeFolder01,
-  hugeFolderAdd,
-  hugeMoreVertical,
-  hugeMusicNote01,
-  hugePaintBoard,
-  hugeTestTube,
-} from '@ng-icons/huge-icons';
-import { solarAltArrowRightBold } from '@ng-icons/solar-icons/bold';
+import { solarMenuDotsBoldDuotone } from '@ng-icons/solar-icons/bold-duotone';
+import { CreateModuleDialogComponent } from '../home/create-folder/create-folder-dialog.component';
 import { LogoComponent } from '../logo/logo.component';
 import { ACTION_ICONS, FILE_TYPE_ICONS, MODULE_COLORS, MODULE_ICONS } from './sidebar.constants';
 import { ContextMenuAction, FolderItem } from './sidebar.types';
-
-const icons = {
-  solarAltArrowRightBold,
-  hugeCalculator,
-  hugeAtom02,
-  hugeCode,
-  hugeCpuCharge,
-  hugeTestTube,
-  hugeDocumentAttachment,
-  hugeDna,
-  hugeBook02,
-  hugeBookOpen01,
-  hugePaintBoard,
-  hugeMusicNote01,
-  hugeBriefcase01,
-  hugeFolder01,
-  hugeFolderAdd,
-  hugeFile02,
-  hugeFileAdd,
-  hugeEdit02,
-  hugeDelete02,
-  hugeMoreVertical,
-};
 
 @Component({
   selector: 'app-sidebar',
   imports: [CommonModule, LogoComponent, NgIconComponent],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  viewProviders: [provideIcons(icons)],
+  viewProviders: [provideIcons({ ...appIcons, solarMenuDotsBoldDuotone })],
 })
 export class SidebarComponent {
   public themeService = inject(ThemeService);
+  public dialog = inject(MatDialog);
+  // NOVO: Injetar NavigationService
+  private navigationService = inject(NavigationService);
 
   public modules = signal<FolderItem[]>(this.getMockData());
   public activeContextMenu = signal<{ itemId: string; x: number; y: number } | null>(null);
@@ -69,28 +32,24 @@ export class SidebarComponent {
   public readonly MODULE_ICONS = MODULE_ICONS;
   public readonly MODULE_COLORS = MODULE_COLORS;
   public readonly FILE_TYPE_ICONS = FILE_TYPE_ICONS;
+  public readonly sidebarWidth = signal<number>(280);
 
-  public sidebarWidth = signal<number>(280); // Largura inicial (70 * 4 = 280px)
   private isResizing = false;
   private startX = 0;
   private startWidth = 0;
 
-  // Constantes de resize
-  private readonly MIN_WIDTH = 200; // Largura mínima
-  private readonly MAX_WIDTH = 600; // Largura máxima
+  private readonly MIN_WIDTH = 200;
+  private readonly MAX_WIDTH = 600;
   private readonly STORAGE_KEY = 'sidebar-width';
 
   constructor() {
-    // Restaurar largura salva
     this.loadSavedWidth();
 
-    // Fechar menu de contexto ao clicar fora
     if (typeof window !== 'undefined') {
       window.addEventListener('click', () => {
         this.activeContextMenu.set(null);
       });
 
-      // Event listeners para resize
       window.addEventListener('mousemove', this.onMouseMove.bind(this));
       window.addEventListener('mouseup', this.stopResize.bind(this));
     }
@@ -119,7 +78,6 @@ export class SidebarComponent {
     const delta = event.clientX - this.startX;
     const newWidth = this.startWidth + delta;
 
-    // Aplicar limites
     const clampedWidth = Math.max(this.MIN_WIDTH, Math.min(this.MAX_WIDTH, newWidth));
 
     this.sidebarWidth.set(clampedWidth);
@@ -166,6 +124,7 @@ export class SidebarComponent {
           {
             id: '1-1',
             name: 'Álgebra Linear',
+            icon: 'HISTORY',
             type: 'folder',
             isOpen: false,
             children: [
@@ -303,9 +262,6 @@ export class SidebarComponent {
     }
   }
 
-  /**
-   * Obtém a cor do ícone
-   */
   public getItemColor(item: FolderItem): string {
     if (item.icon && item.type === 'folder') {
       return MODULE_COLORS[item.icon] || MODULE_COLORS.DEFAULT;
@@ -317,13 +273,10 @@ export class SidebarComponent {
       case 'file':
         return 'text-gray-500 dark:text-gray-400';
       default:
-        return 'text-gray-500 dark:text-gray-400';
+        return 'text-on-surface-400';
     }
   }
 
-  /**
-   * Toggle de abertura de pasta
-   */
   public toggleFolder(item: FolderItem): void {
     if (item.type !== 'folder') return;
 
@@ -332,22 +285,19 @@ export class SidebarComponent {
     });
   }
 
-  /**
-   * Seleciona um item
-   */
+  // ATUALIZADO: Notificar NavigationService quando selecionar item
   public selectItem(item: FolderItem, event: Event): void {
     event.stopPropagation();
     this.selectedItem.set(item.id);
 
+    // NOVO: Atualizar NavigationService com o item selecionado
+    this.navigationService.setCurrentItem(item, this.modules());
+
     if (item.type !== 'folder') {
       console.log('Abrir arquivo:', item);
-      // Aqui você implementaria a lógica para abrir o arquivo
     }
   }
 
-  /**
-   * Abre menu de contexto
-   */
   public openContextMenu(event: MouseEvent, item: FolderItem): void {
     event.preventDefault();
     event.stopPropagation();
@@ -361,9 +311,6 @@ export class SidebarComponent {
     });
   }
 
-  /**
-   * Ações do menu de contexto
-   */
   public getContextMenuActions(item: FolderItem): ContextMenuAction[] {
     const actions: ContextMenuAction[] = [];
 
@@ -408,25 +355,10 @@ export class SidebarComponent {
     return actions;
   }
 
-  /**
-   * Cria uma subpasta
-   */
   private createSubfolder(parentItem: FolderItem): void {
-    const newFolder: FolderItem = {
-      id: `${parentItem.id}-${Date.now()}`,
-      name: 'Nova Pasta',
-      type: 'folder',
-      isOpen: false,
-      children: [],
-    };
-
-    this.addChildToItem(parentItem.id, newFolder);
-    console.log('Pasta criada:', newFolder);
+    this.dialog.open(CreateModuleDialogComponent);
   }
 
-  /**
-   * Cria um arquivo
-   */
   private createFile(parentItem: FolderItem): void {
     const newFile: FolderItem = {
       id: `${parentItem.id}-${Date.now()}`,
@@ -435,12 +367,8 @@ export class SidebarComponent {
     };
 
     this.addChildToItem(parentItem.id, newFile);
-    console.log('Arquivo criado:', newFile);
   }
 
-  /**
-   * Renomeia um item
-   */
   private renameItem(item: FolderItem): void {
     const newName = prompt('Novo nome:', item.name);
     if (newName) {
@@ -449,19 +377,19 @@ export class SidebarComponent {
     }
   }
 
-  /**
-   * Deleta um item
-   */
   private deleteItem(item: FolderItem): void {
     if (confirm(`Mover "${item.name}" para a lixeira?`)) {
       this.removeItemRecursively(this.modules(), item.id);
       console.log('Item deletado:', item.id);
+
+      // NOVO: Limpar seleção se o item deletado estava selecionado
+      if (this.selectedItem() === item.id) {
+        this.navigationService.clearSelection();
+        this.selectedItem.set(null);
+      }
     }
   }
 
-  /**
-   * Adiciona um filho a um item recursivamente
-   */
   private addChildToItem(parentId: string, newChild: FolderItem): void {
     const addRecursive = (items: FolderItem[]): FolderItem[] => {
       return items.map((item) => {
@@ -482,9 +410,6 @@ export class SidebarComponent {
     this.modules.update((items) => addRecursive(items));
   }
 
-  /**
-   * Atualiza um item recursivamente
-   */
   private updateItemRecursively(
     items: FolderItem[],
     id: string,
@@ -505,9 +430,6 @@ export class SidebarComponent {
     this.modules.update((items) => updateRecursive(items));
   }
 
-  /**
-   * Remove um item recursivamente
-   */
   private removeItemRecursively(items: FolderItem[], id: string): void {
     const removeRecursive = (items: FolderItem[]): FolderItem[] => {
       return items

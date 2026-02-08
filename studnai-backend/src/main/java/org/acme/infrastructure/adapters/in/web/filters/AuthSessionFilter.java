@@ -1,48 +1,49 @@
 package org.acme.infrastructure.adapters.in.web.filters;
 
-import java.io.IOException;
-
 import org.acme.application.ports.out.SessionServicePort;
 import org.acme.infrastructure.adapters.in.web.security.UserSecurityContext;
+import org.jboss.resteasy.reactive.server.ServerRequestFilter;
 
 import io.smallrye.mutiny.Uni;
-import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.Provider;
 
-@Provider
 @ApplicationScoped
-@Priority(Priorities.AUTHENTICATION)
-public class AuthSessionFilter  {
+public class AuthSessionFilter  { // Removi @Provider e @Priority (vão para o método)
 
     @Inject
     SessionServicePort sessionService;
 
-    @Secured
-    public Uni<Response> filter(ContainerRequestContext requestContext) throws IOException {
+    @Secured 
+    @ServerRequestFilter(priority = Priorities.AUTHENTICATION)
+    public Uni<Response> filter(ContainerRequestContext requestContext) {
         String sessionId = this.extractSessionId(requestContext);
 
+        System.out.println("DEBUG: Session ID recebido: " + sessionId);
+
         if (sessionId == null) {
+            System.out.println("DEBUG: Falha - ID nulo");
             return Uni.createFrom().item(unauthorizedResponse());
         }
 
         return sessionService.get(sessionId)
-            .onItem().transform(session -> {
-                
+            .map(session -> { // Use .map pois não há IO bloqueante aqui dentro
+                System.out.println("DEBUG: Objeto Session do Redis: " + session);
+                // Se o Redis retornou null ou vazio
                 if (session == null) {
-                    return unauthorizedResponse(); // Aborta com 401
+                    System.out.println("DEBUG: Falha - Redis retornou null");
+                    return unauthorizedResponse(); 
                 }
 
-                // Cenário B: Sucesso! Configura o contexto
+                // Injeta a sessão no contexto para o Producer pegar depois
                 requestContext.setProperty("user_session", session);
                 requestContext.setSecurityContext(new UserSecurityContext(session));
 
-                // Retornar NULL significa "Pode passar, continue a requisição"
+                // Retornar NULL significa "Siga em frente, pode chamar o Controller"
                 return null; 
             });
     }
@@ -63,5 +64,4 @@ public class AuthSessionFilter  {
                 .entity("Sessão inválida ou expirada.")
                 .build();
     }
-    
 }
